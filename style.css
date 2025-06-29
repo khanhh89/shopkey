@@ -19,14 +19,17 @@
 
     .container {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-        max-width: 650px;
+        max-width: 50%;
         margin: 60px auto;
         padding: 40px;
         background-color: var(--card-bg);
         border-radius: 20px;
         animation: fadeInDown 1s ease;
     }
-
+    .container:hover{
+        transform: scale(1.005);
+        transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
     h3 {
         text-align: center;
         font-weight: 800;
@@ -240,4 +243,72 @@
     .alert {
         font-size: 14px;
     }
+}
+
+
+.bodys {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px; /* khoảng cách giữa các mục */
+  padding: 10px;
+  flex-wrap: wrap; /* để xuống hàng khi nhỏ màn hình */
+}
+
+.bodys1,
+.bodys2 {
+  width: 25%;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+  transition: transform 0.3s;
+}
+
+.bodys1:hover,
+.bodys2:hover {
+  transform: translateY(-5px);
+}
+
+.bodys img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.bodys h4 {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.btnDownload {
+  background-color: #16a34a;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btnDownload {
+    display: inline-block;
+    background-color: #16a34a;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    margin: 10px;
+}
+.btnDownload a{
+    text-decoration: none;
+    color: white;
+}
+
+.btnDownload:hover {
+    transform: scale(1.05);
 }
