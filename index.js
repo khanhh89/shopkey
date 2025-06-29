@@ -1,7 +1,6 @@
 const discountCodes = {
   'GIAM10': 0.1,     // Giảm 10%
   'GIAM30': 0.3,     // Giảm 30%
-  'FREE100': 1       // Giảm 100%
 };
 
 
@@ -42,7 +41,7 @@ function showPaymentInfo() {
     return;
   }
 
-  const priceMap = { '1day': 10000, '7day': 40000, '30day': 100000 };
+  const priceMap = { '1day': 3000, '7day': 40000, '30day': 100000 };
   const displayTextMap = { '1day': '1 ngày', '7day': '7 ngày', '30day': '30 ngày' };
   const originalAmount = priceMap[duration];
 
@@ -62,7 +61,6 @@ function showPaymentInfo() {
   document.getElementById("note").innerText = randomCode;
   document.getElementById("product").innerText = product;
 
-  // ✅ Áp dụng mã giảm giá nếu có
   let discount = 0;
   let message = '';
   let isValid = false;
@@ -136,8 +134,6 @@ function confirmPayment() {
     `,
     confirmButtonColor: '#16a34a'
   });
-
-  // Tùy chọn: Ghi kết quả vào resultBox
   document.getElementById("resultBox").innerHTML = `
     <div class="alert alert-success">
       ✅ Đã xác nhận thanh toán. Vui lòng đợi admin xử lý.
