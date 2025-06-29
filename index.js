@@ -1,5 +1,5 @@
 const discountCodes = {
-  'GIAM10': 0.1,     // Giảm 10%
+  'GIAM10': 0.1,     // Giảm 10%More actions
   'GIAM30': 0.3,     // Giảm 30%
 };
 
@@ -140,44 +140,6 @@ function confirmPayment() {
     </div>
   `;
 
+  // Vô hiệu hóa nút xác nhận để tránh bấm lại
   document.getElementById("confirmBtn").disabled = true;
 }
-
-
-
- const games = [
-    {
-      title: "Liên Quân Mobile ADR",
-      image: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
-      links: [
-        { text: "Tải tách gốc", url: "https://www.mediafire.com/file/nxs9vqct8g4gpxd/HACK+MAP+V2.5_t%C3%A1ch.apk/file" },
-        { text: "Tải xóa gốc", url: "https://www.mediafire.com/file/02uebms0kuab6mm/HACK+MAP+V2.5.apk/file" },
-        { text: "Lấy Key Free", url: "#" }
-      ]
-    },
-    {
-      title: "Liên Quân Mobile ADR",
-      image: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
-      links: [
-        { text: "Tải tách gốc", url: "https://www.mediafire.com/file/nxs9vqct8g4gpxd/HACK+MAP+V2.5_t%C3%A1ch.apk/file" },
-        { text: "Tải xóa gốc", url: "https://www.mediafire.com/file/02uebms0kuab6mm/HACK+MAP+V2.5.apk/file" },
-        { text: "Lấy Key Free", url: "#" }
-      ]
-    },
-   
-  ];
-
-  const gameList = document.getElementById("gameList");
-
-  games.forEach(game => {
-    const gameHTML = `
-      <div class="bodys1">
-        <img src="${game.image}" alt="${game.title}">
-        <h4>${game.title}</h4>
-        ${game.links.map(link => `
-          <button class="btnDownload" id="btnDownload"><a href="${link.url}" target="_blank">${link.text}</a></button>
-        `).join('')}
-      </div>
-    `;
-    gameList.innerHTML += gameHTML;
-  });
