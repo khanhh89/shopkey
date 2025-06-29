@@ -130,7 +130,7 @@ function confirmPayment() {
     html: `
       Cảm ơn bạn đã thanh toán.<br>
       <strong>Mã giao dịch:</strong> ${note}<br>
-      Key sẽ được gửi trong vòng ít phút qua Zalo hoặc Email.
+      Liên hệ admin nhóm để nhận key nhé!.
     `,
     confirmButtonColor: '#16a34a'
   });
