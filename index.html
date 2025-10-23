@@ -1,864 +1,469 @@
 <!DOCTYPE html>
 <html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shop Key Game</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <meta name="description" content="Shop Key Game - Mua key game giá rẻ">
-  <title>Shop Key Game</title>
-  <link rel="icon" type="image/png"
-    href="https://anhdephd.vn/wp-content/uploads/2022/04/anh-avatar-gau-cam-chiec-dep-600x600.jpg">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <!-- SweetAlert2 CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Bootstrap & SweetAlert2 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <style>
-    :root {
-      --primary-color: #adf590;
-      /* Xanh lá cây nhạt */
-      --secondary-color: #8b5cf6;
-      /* Tím */
-      --bg-dark: #afbcd9;
-      /* Nền chính, màu xanh xám */
-      --card-bg: #f3f3ea;
-      /* Nền thẻ/container, màu kem nhạt */
-      --input-bg: #ededed;
-      /* Nền input, màu xám nhạt */
-      --text-color: #3b3b3b;
-      /* Màu chữ chính, xám đậm */
-      --border-radius: 12px;
-      /* Bo góc chung */
-      --shadow-color-dark: rgba(50, 50, 93, 0.25);
-      --shadow-color-light: rgba(0, 0, 0, 0.3);
-    }
-
-    body {
-      background-image: url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/09/hinh-nen-lien-quan.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-attachment: fixed;
-      font-family: 'Segoe UI', sans-serif;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      color: var(--text-color);
-      /* Đảm bảo màu chữ mặc định cho body */
-    }
-
-    .container {
-      box-shadow: var(--shadow-color-dark) 0px 50px 100px -20px, var(--shadow-color-light) 0px 30px 60px -30px;
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 30px;
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      animation: fadeInDown 0.5s ease;
-      position: relative;
-      z-index: 1;
-    }
-
-    h3 {
-      text-align: center;
-      font-weight: 800;
-      margin-bottom: 30px;
-      color: var(--text-color);
-    }
-
-    .form-label {
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: var(--text-color);
-      /* Đảm bảo màu chữ cho label */
-    }
-
-    .form-select,
-    .form-control {
-      background-color: var(--input-bg);
-      color: var(--text-color);
-      border: 1px solid #64748b;
-      transition: all 0.3s;
-      padding: 10px 15px;
-      border-radius: 8px;
-      /* Thêm bo góc cho input/select */
-    }
-
-    .form-select:focus,
-    .form-control:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 0.25rem rgba(173, 245, 144, 0.25);
-    }
-
-    .btn-warning {
-      background: linear-gradient(to right, #d8b59c, #c9c7be);
-      border: none;
-      font-weight: bold;
-      color: black;
-      padding: 10px 25px;
-      border-radius: var(--border-radius);
-      transition: all 0.3s;
-    }
-
-    .btn-warning:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
-    }
-
-    .btn-primary {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      border: none;
-      font-weight: bold;
-      border-radius: var(--border-radius);
-      transition: all 0.3s;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
-    }
-
-    /* Modal styles */
-    .modal {
-      position: fixed;
-      z-index: 1050;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      outline: 0;
-      display: none;
-      /* Bootstrap handles this */
-    }
-
-    .modal.show {
-      display: block;
-      /* Bootstrap handles this */
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1040;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-content {
-      background-color: var(--card-bg);
-      box-shadow: var(--shadow-color-dark) 0px 50px 100px -20px, var(--shadow-color-light) 0px 30px 60px -30px;
-      color: var(--text-color);
-      border-radius: var(--border-radius);
-    }
-
-    .modal-header {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      /* Điều chỉnh màu border */
-      color: var(--text-color);
-    }
-
-    .modal-header .btn-close {
-      filter: invert(0.5);
-      /* Đảo màu nút đóng để dễ nhìn trên nền sáng */
-    }
-
-    .modal-footer {
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      /* Điều chỉnh màu border */
-    }
-
-    /* Style cho QR Code Container */
-    #qrCodeContainer {
-      border: 3px solid var(--primary-color);
-      border-radius: var(--border-radius);
-      padding: 10px;
-      max-width: 220px;
-      /* Giới hạn kích thước container QR */
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      background-color: #fff;
-      /* Nền trắng cho QR code */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Đảm bảo hình ảnh/canvas bên trong QR Code Container không tràn ra ngoài */
-    #qrCodeContainer canvas,
-    #qrCodeContainer img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-
-
-    .copy-btn {
-      margin-left: 10px;
-      font-size: 14px;
-      background-color: #22c55e;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-      background-color: #16a34a;
-      transform: scale(1.05);
-    }
-
-    /* Styles for hide/show key functionality */
-    .key-info-row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-      /* Cho phép xuống dòng trên mobile */
-    }
-
-    .key-info-row p {
-      margin-bottom: 0;
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-      color: var(--text-color);
-    }
-
-    .key-display-wrapper {
-      flex-grow: 1;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      min-width: 120px;
-      /* Đảm bảo đủ không gian cho placeholder */
-      margin-right: 10px;
-    }
-
-    .key-display-wrapper span {
-      font-weight: 600;
-      color: var(--text-color);
-      transition: filter 0.3s ease, color 0.3s ease;
-      display: inline-block;
-    }
-
-    .key-display-wrapper span.hidden-key {
-      filter: blur(4px);
-      /* Làm mờ nhẹ hơn để phù hợp với nền sáng */
-      color: #888;
-      /* Màu xám khi ẩn */
-      user-select: none;
-      cursor: pointer;
-    }
-
-    .key-display-wrapper span.revealed-key {
-      filter: blur(0px);
-      color: var(--text-color);
-      user-select: all;
-      cursor: text;
-    }
-
-    .key-actions {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      /* Khoảng cách giữa nút mắt và nút copy */
-      flex-shrink: 0;
-    }
-
-    .toggle-visibility {
-      background-color: var(--input-bg);
-      color: var(--text-color);
-      border: 1px solid #ccc;
-      padding: 5px 8px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      /* Để căn giữa icon */
-      align-items: center;
-      justify-content: center;
-    }
-
-    .toggle-visibility:hover {
-      background-color: #e0e0e0;
-      color: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-
-    .games-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .game-card {
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s;
-    }
-
-    .game-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .game-image {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .game-content {
-      padding: 15px;
-    }
-
-    .game-title {
-      margin: 0 0 10px;
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-color);
-    }
-
-    .game-btn {
-      display: block;
-      width: 100%;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        max-width: 95%;
-        padding: 20px;
+    <style>
+      body {
+        background: #0f172a;
+        color: #e2e8f0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial;
       }
-
-      .games-container {
-        grid-template-columns: 1fr;
+      .container-narrow {
+        max-width: 880px;
       }
-
-      .key-info-row {
-        flex-direction: column;
-        /* Xếp dọc các phần tử */
-        align-items: flex-start;
-        /* Căn trái */
+      .card {
+        background: #0b1220;
+        border: 1px solid #1f2a44;
+        border-radius: 14px;
       }
-
-      .key-info-row p {
-        margin-bottom: 5px;
-        margin-right: 0;
+      .game-card {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 16px;
+        padding: 12px;
+        border: 1px solid #1f2a44;
+        border-radius: 14px;
+        background: #0b1220;
+        margin-bottom: 14px;
       }
-
-      .key-display-wrapper {
+      .game-image {
         width: 100%;
-        margin-right: 0;
-        margin-bottom: 10px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #1f2a44;
       }
-
-      .key-actions {
-        width: 100%;
-        justify-content: flex-start;
-        /* Căn trái các nút */
+      .game-title {
+        margin: 0 0 8px;
+        color: #e2e8f0;
       }
-    }
-
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
+      .game-btn {
+        margin-right: 8px;
+        margin-bottom: 8px;
       }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      .form-label {
+        color: #cbd5e1;
       }
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
+      .text-muted {
+        color: #94a3b8 !important;
       }
-
-      50% {
-        transform: scale(1.03);
+      .btn-success {
+        background: #16a34a;
+        border: 0;
       }
-
-      100% {
-        transform: scale(1);
+      .btn-primary {
+        background: #3b82f6;
+        border: 0;
       }
-    }
+    </style>
+  </head>
+  <body>
+    <div class="container container-narrow py-4">
+      <header class="mb-4">
+        <h1 class="h4 mb-1">Shop Key Game</h1>
+        <div class="text-muted">Thanh toán QR • Nhận key nhanh</div>
+      </header>
 
-    /* SweetAlert2 Custom Styles */
-    .custom-swal-popup {
-      background-color: var(--card-bg) !important;
-      color: var(--text-color) !important;
-      border-radius: var(--border-radius) !important;
-      box-shadow: var(--shadow-color-dark) 0px 50px 100px -20px, var(--shadow-color-light) 0px 30px 60px -30px !important;
-      border: 1px solid rgba(0, 0, 0, 0.1) !important;
-    }
+      <!-- DANH SÁCH GAME (render bằng JS của bạn) -->
+      <section class="mb-4">
+        <h2 class="h6 mb-3">Game / Ứng dụng</h2>
+        <div id="gameList"></div>
+      </section>
 
-    .custom-swal-title {
-      color: var(--primary-color) !important;
-      font-size: 1.8rem !important;
-      font-weight: 600 !important;
-    }
-
-    .custom-swal-text {
-      color: var(--text-color) !important;
-      font-size: 1.1rem !important;
-      margin-top: 10px !important;
-    }
-
-    .custom-swal-button {
-      background-color: var(--primary-color) !important;
-      color: var(--text-color) !important;
-      border-radius: 8px !important;
-      font-size: 1.1rem !important;
-      padding: 10px 20px !important;
-      transition: background-color 0.2s ease, transform 0.2s ease !important;
-      border: none !important;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
-    }
-
-    .custom-swal-button:hover {
-      background-color: var(--secondary-color) !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3) !important;
-    }
-
-    .custom-swal-button:active {
-      transform: translateY(0) !important;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2) !important;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <h3 class="text-center mb-4">
-      <i class="fa-solid fa-gamepad me-2"></i>SHOP KEY GAME<i class="fa-solid fa-gamepad ms-2"></i>
-    </h3>
-    <form id="orderForm">
-      <div class="mb-3">
-        <label class="form-label"><i class="fa-solid fa-shop me-2"></i>Game bạn muốn mua</label>
-        <select class="form-select" id="game" required>
-          <option value="">--- Chọn Game ---</option>
-          <option value="Liên Quân Mobile">Liên Quân Mobile</option>
-          <option value="PUBG Mobile">PUBG Mobile</option>
-          <option value="Free Fire">Free Fire</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label class="form-label"><i class="fa-solid fa-clock me-2"></i>Chọn thời hạn</label>
-        <select class="form-select" id="duration" required>
-          <option value="">--- Chọn thời gian ---</option>
-          <option value="1day">1 ngày - 2.000đ</option>
-          <option value="7day">7 ngày - 40.000đ</option>
-          <option value="30day">30 ngày - 100.000đ</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label class="form-label"><i class="fa-solid fa-gift me-2"></i>Mã giảm giá (nếu có)</label>
-        <input type="text" class="form-control" id="discountCode" placeholder="Nhập mã giảm giá...">
-      </div>
-      <div class="mb-4 text-center">
-        <button type="button" class="btn btn-warning" id="paymentButton">Tiếp tục thanh toán</button>
-      </div>
-
-      <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title"><i class="fa-solid fa-address-card me-2"></i>Thông tin thanh
-                toán</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      <!-- FORM ĐẶT HÀNG -->
+      <section class="mb-5">
+        <div class="card p-3">
+          <form id="orderForm" class="row gy-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="game">Chọn game</label>
+              <select id="game" class="form-select">
+                <option value="">-- Chọn --</option>
+                <option value="Liên Quân Mobile ADR">
+                  Liên Quân Mobile ADR
+                </option>
+              </select>
             </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="duration">Thời hạn</label>
+              <select id="duration" class="form-select">
+                <option value="">-- Chọn --</option>
+                <option value="1day">1 ngày (2.500đ)</option>
+                <option value="7day">7 ngày (40.000đ)</option>
+                <option value="30day">30 ngày (100.000đ)</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="discountCode">Mã giảm giá</label>
+              <input
+                id="discountCode"
+                class="form-control"
+                placeholder="GIAM10 / GIAM30 / FREE100"
+              />
+            </div>
+            <div class="col-12 d-flex align-items-end">
+              <button type="button" id="paymentButton" class="btn btn-success">
+                Tiếp tục thanh toán
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- MODAL THANH TOÁN -->
+      <div
+        class="modal fade"
+        id="paymentModal"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div
+            class="modal-content"
+            style="
+              background: #0b1220;
+              color: #e2e8f0;
+              border: 1px solid #1f2a44;
+            "
+          >
+            <div class="modal-header">
+              <h5 class="modal-title">Thanh toán & Xác nhận</h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
             <div class="modal-body">
-              <p><strong>👤 Chủ TK:</strong> DAO XUAN KHANH</p>
-              <p><strong><i class="fa-solid fa-building-user me-2"></i>Ngân hàng:</strong> MB Bank</p>
+              <div id="resultBox" class="mb-3"></div>
 
-              <!-- STK row - Removed hide/show and copy functionality -->
-              <p><strong><i class="fa-solid fa-address-card me-2"></i>STK:</strong>
-                <span id="stk">075020699999</span>
-              </p>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="card p-3">
+                    <div class="mb-2">
+                      <div class="text-muted small">Mã giao dịch</div>
+                      <div class="d-flex align-items-center">
+                        <div id="note" class="me-2 fw-semibold"></div>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-light copy-btn"
+                          data-target="note"
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                    <div class="mb-2">
+                      <div class="text-muted small">Sản phẩm</div>
+                      <div id="product" class="fw-semibold"></div>
+                    </div>
+                    <div>
+                      <div class="text-muted small">Số tiền</div>
+                      <div id="amount" class="fw-semibold"></div>
+                    </div>
+                  </div>
+                </div>
 
-              <!-- Nội dung row with hide/show and copy -->
-              <div class="key-info-row">
-                <p><strong><i class="fa-solid fa-note-sticky me-2"></i>Nội dung:</strong></p>
-                <span class="key-display-wrapper">
-                  <span id="note" class="hidden-key">********************</span>
-                </span>
-                <span class="key-actions">
-                  <button type="button" class="toggle-visibility" data-target-id="note">
-                    <i class="fa-solid fa-eye"></i>
-                  </button>
-                  <button type="button" class="copy-btn btn btn-sm btn-success" data-target-id="note">
-                    <i class="fa-solid fa-clipboard"></i> Copy
-                  </button>
-                </span>
+                <div class="col-md-6">
+                  <div class="card p-3 text-center">
+                    <div class="mb-2">Quét QR để thanh toán</div>
+                    <!-- ảnh QR do JS của bạn set src -->
+                    <img
+                      id="qrImage"
+                      alt="QR"
+                      style="
+                        max-width: 100%;
+                        border-radius: 8px;
+                        border: 1px solid #1f2a44;
+                      "
+                    />
+                    <div class="mt-2">
+                      <a
+                        id="paymentLink"
+                        class="btn btn-outline-info btn-sm"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        Mở trang MBBank
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
 
-              <p><strong><i class="fa-solid fa-coins me-2"></i>Số tiền:</strong> <span id="amount">--</span></p>
-              <p><strong><i class="fa-solid fa-cart-shopping me-2"></i>Sản phẩm:</strong> <span id="product">--</span>
-              </p>
-
-              <div class="text-center my-3">
-                <!-- Changed img to div for qrcode.js -->
-                <div id="qrCodeContainer"></div>
-              </div>
-
-              <div class="d-grid gap-2">
-                <a href="#" class="btn btn-success" id="paymentLink">
-                  <i class="fa-solid fa-money-bill-wave me-2"></i>Mở trang thanh toán
-                </a>
-                <button type="button" class="btn btn-primary" id="confirmBtn">
-                  <i class="fa-solid fa-check me-2"></i>Tôi đã thanh toán
-                </button>
-              </div>
-
-              <div id="resultBox" class="mt-3"></div>
+            <div class="modal-footer">
+              <button type="button" id="confirmBtn" class="btn btn-primary">
+                Tôi đã thanh toán
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </form>
-  </div>
 
-  <div class="games-container" id="gameList"></div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- qrcode.js library -->
-  <script src="https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js"></script>
-  <script>
-    // Biến toàn cục để lưu trữ key thực tế
-    let actualStk = '075020699999'; // Giá trị STK mặc định
-    let actualNote = 'NAP1000'; // Giá trị Nội dung mặc định, sẽ được cập nhật
-
-    // Hàm để bật/tắt hiển thị key (chỉ dùng cho 'note' bây giờ)
-    function toggleVisibility(elementId) {
-      const element = document.getElementById(elementId);
-      const toggleButton = document.querySelector(`.toggle-visibility[data-target-id="${elementId}"]`);
-      const isHidden = element.classList.contains('hidden-key');
-
-      if (isHidden) {
-        element.textContent = actualNote; // Chỉ có 'note' sử dụng
-        element.classList.remove('hidden-key');
-        element.classList.add('revealed-key');
-        toggleButton.innerHTML = '<i class="fa-solid fa-eye-slash"></i>'; // Icon mắt bị gạch
-      } else {
-        element.textContent = '********************';
-        element.classList.remove('revealed-key');
-        element.classList.add('hidden-key');
-        toggleButton.innerHTML = '<i class="fa-solid fa-eye"></i>'; // Icon mắt mở
-      }
-    }
-
-    // Hàm xử lý sao chép
-    function copyText(textToCopy, elementId) {
-      if (!textToCopy || textToCopy.includes('Đang tải...') || textToCopy.includes('Lỗi')) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Chưa sẵn sàng!',
-          text: 'Nội dung chưa sẵn sàng để sao chép. Vui lòng thử lại.',
-          confirmButtonText: 'Đã hiểu',
-          customClass: {
-            popup: 'custom-swal-popup',
-            title: 'custom-swal-title',
-            htmlContainer: 'custom-swal-text',
-            confirmButton: 'custom-swal-button'
-          },
-          buttonsStyling: false
-        });
-        return;
-      }
-
-      // Thử dùng Clipboard API hiện đại
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(textToCopy)
-          .then(() => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Đã sao chép!',
-              text: 'Nội dung đã được sao chép vào clipboard.',
-              showConfirmButton: false,
-              timer: 1500,
-              customClass: {
-                popup: 'custom-swal-popup',
-                title: 'custom-swal-title',
-                htmlContainer: 'custom-swal-text',
-                confirmButton: 'custom-swal-button'
+      <footer class="small text-muted mt-4">
+        © <span id="year"></span> Shop Key Game
+      </footer>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const games = [
+          {
+            title: "Liên Quân Mobile ADR",
+            image:
+              "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
+            links: [
+              {
+                text: "Tải tách gốc",
+                url: "https://www.mediafire.com/file/z8tqbiufur3uely/MAP2.9+FIX+V%C4%82NG+_+T%C3%81CH.apk/file",
               },
-              buttonsStyling: false
-            });
-            // Tự động hiển thị nếu đang ẩn và là 'note'
-            if (elementId === 'note') {
-              const element = document.getElementById(elementId);
-              if (element && element.classList.contains('hidden-key')) {
-                toggleVisibility(elementId);
-              }
-            }
-          })
-          .catch(err => {
-            console.error('Lỗi sao chép (Clipboard API):', err);
-            fallbackCopyText(textToCopy, elementId); // Dùng cách dự phòng nếu lỗi
+              {
+                text: "Tải xóa gốc",
+                url: "https://www.mediafire.com/file/28o2ln5md8h1oml/2.9+FIX+CRASH+(+L%E1%BA%A6N+2).apk/file",
+              },
+              { text: "Lấy Key Free", url: "https://link4m.com/u2Uqp" },
+            ],
+          },
+        ];
+
+        const discountCodes = {
+          GIAM10: { value: 0.1, description: "Giảm 10%" },
+          GIAM30: { value: 0.3, description: "Giảm 30%" },
+          FREE100: { value: 1, description: "Miễn phí" },
+        };
+
+        const priceConfig = {
+          "1day": { amount: 2000, display: "1 ngày" },
+          "7day": { amount: 40000, display: "7 ngày" },
+          "30day": { amount: 100000, display: "30 ngày" },
+          "60day": { amount: 150000, display: "60 ngày" },
+          "90day": { amount: 220000, display: "90 ngày" },
+        };
+        const el = (id) => document.getElementById(id);
+        const state = {
+          modal: null,
+          transaction: null,
+          processing: false,
+        };
+        const renderGames = () => {
+          const container = el("gameList");
+          container.innerHTML = games
+            .map(
+              (game) => `
+            <div class="game-card">
+                <img src="${game.image}" alt="${
+                game.title
+              }" class="game-image" onerror="this.src='https://via.placeholder.com/180?text=Image+Not+Found'">
+                <div class="game-content">
+                    <h4 class="game-title">${game.title}</h4>
+                    ${game.links
+                      .map(
+                        (link) =>
+                          `<a href="${link.url}" ${
+                            link.url !== "#" ? 'target="_blank"' : ""
+                          } class="btn btn-primary game-btn">${link.text}</a>`
+                      )
+                      .join("")}
+                </div>
+            </div>
+        `
+            )
+            .join("");
+        };
+        const applyDiscount = (code, amount) => {
+          const dc = discountCodes[code];
+          if (!dc)
+            return {
+              final: amount,
+              msg: code ? `⚠️ Mã giảm giá "${code}" không hợp lệ.` : "",
+            };
+          const final = Math.max(0, Math.round(amount * (1 - dc.value)));
+          return {
+            final,
+            msg: `✅ Mã giảm giá "${code}" (${dc.description}) đã được áp dụng.`,
+          };
+        };
+
+        // Update modal content with transaction details
+        const updateModal = ({ code, product, amount, message }) => {
+          el("note").textContent = code;
+          el("product").textContent = product;
+          el("amount").textContent = amount.toLocaleString("vi-VN") + " VNĐ";
+
+          // Generate QR code URL based on transaction details
+          el(
+            "qrImage"
+          ).src = `https://qr.sepay.vn/img?acc=075020699999&bank=MBBank&amount=${amount}&des=${code}&template=compact`;
+
+          // Construct MBBank payment link
+          el(
+            "paymentLink"
+          ).href = `https://mbbank.com.vn/QRTransfer?bankId=MB&accountNo=075020699999&amount=${amount}&content=${encodeURIComponent(
+            code
+          )}`;
+
+          // Display discount message
+          el("resultBox").innerHTML = message
+            ? `<div class="alert alert-${
+                amount === 0 ? "warning" : "success"
+              }">${message}</div>`
+            : "";
+        };
+
+        // Generic SweetAlert2 alert function
+        const showAlert = (icon, title, html) =>
+          Swal.fire({ icon, title, html, confirmButtonColor: "#16a34a" });
+
+        // Generic SweetAlert2 toast notification
+        const showToast = (msg) =>
+          Swal.fire({
+            icon: "success",
+            title: msg,
+            toast: true,
+            position: "top-end",
+            timer: 2000,
+            showConfirmButton: false,
           });
-      } else {
-        // Cách dự phòng cho trình duyệt cũ hơn
-        fallbackCopyText(textToCopy, elementId);
-      }
-    }
 
-    // Hàm sao chép dự phòng
-    function fallbackCopyText(textToCopy, elementId) {
-      const tempInput = document.createElement('textarea');
-      tempInput.value = textToCopy;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      try {
-        document.execCommand('copy');
-        Swal.fire({
-          icon: 'success',
-          title: 'Đã sao chép!',
-          text: 'Nội dung đã được sao chép vào clipboard (phương pháp dự phòng).',
-          showConfirmButton: false,
-          timer: 1500,
-          customClass: {
-            popup: 'custom-swal-popup',
-            title: 'custom-swal-title',
-            htmlContainer: 'custom-swal-text',
-            confirmButton: 'custom-swal-button'
-          },
-          buttonsStyling: false
-        });
-        // Tự động hiển thị nếu đang ẩn và là 'note'
-        if (elementId === 'note') {
-          const element = document.getElementById(elementId);
-          if (element && element.classList.contains('hidden-key')) {
-            toggleVisibility(elementId);
+        // Handle payment button click
+        const handlePayment = () => {
+          if (state.processing) return; 
+          state.processing = true;
+          const game = el("game")?.value;
+          const duration = el("duration")?.value;
+          const discountCode = el("discountCode")?.value.trim().toUpperCase();
+          const config = priceConfig[duration];
+          if (!game || !config) {
+            showAlert(
+              "error",
+              "Thiếu thông tin!",
+              "Vui lòng chọn game và thời hạn."
+            );
+            state.processing = false;
+            return;
           }
-        }
-      } catch (err) {
-        console.error('Lỗi sao chép (Fallback):', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Lỗi sao chép!',
-          text: 'Không thể sao chép tự động. Vui lòng sao chép thủ công.',
-          confirmButtonText: 'Đã hiểu',
-          customClass: {
-            popup: 'custom-swal-popup',
-            title: 'custom-swal-title',
-            htmlContainer: 'custom-swal-text',
-            confirmButton: 'custom-swal-button'
-          },
-          buttonsStyling: false
-        });
-      } finally {
-        document.body.removeChild(tempInput);
-      }
-    }
 
-    // Event listeners cho các nút copy và nút bật/tắt hiển thị
-    document.addEventListener('click', function (event) {
-      // Xử lý nút copy (chỉ 'note' có data-target-id)
-      if (event.target.closest('.copy-btn')) {
-        const button = event.target.closest('.copy-btn');
-        const targetId = button.dataset.targetId;
-        let textToCopy = '';
+          const discountResult = applyDiscount(discountCode, config.amount);
+          const transCode = "DXK" + Math.floor(1000 + Math.random() * 9000); // Unique transaction code
+          const product = `${config.display} | ${game}`;
 
-        // Nếu là nút copy của 'note'
-        if (targetId === 'note') {
-          textToCopy = actualNote;
-        }
-        // Nếu là nút copy tĩnh khác (ví dụ, nếu có nút copy cho STK mà không có toggle)
-        else if (button.dataset.text) {
-          textToCopy = button.dataset.text; // Lấy text từ data-text attribute
-        }
-        copyText(textToCopy, targetId);
-      }
+          state.transaction = {
+            code: transCode,
+            product,
+            amount: discountResult.final,
+          };
 
-      // Xử lý nút bật/tắt hiển thị (chỉ 'note' có data-target-id)
-      if (event.target.closest('.toggle-visibility')) {
-        const button = event.target.closest('.toggle-visibility');
-        const targetId = button.dataset.targetId;
-        if (targetId === 'note') { // Đảm bảo chỉ xử lý cho 'note'
-          toggleVisibility(targetId);
-        }
-      }
-    });
+          updateModal({
+            code: transCode,
+            product,
+            amount: discountResult.final,
+            message: discountResult.msg,
+          });
+          state.modal.show(); // Show the Bootstrap modal
+          state.processing = false;
+        };
 
-    // Khởi tạo Bootstrap Modal
-    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'), {
-      keyboard: false
-    });
+        // Handle payment confirmation
+        const confirmPayment = () => {
+          if (!state.transaction || state.processing) return;
+          state.processing = true;
 
-    // Lắng nghe sự kiện modal được hiển thị
-    document.getElementById('paymentModal').addEventListener('shown.bs.modal', function () {
-      // Đảm bảo Nội dung được ẩn khi modal mở
-      const noteElement = document.getElementById('note');
-      const toggleNoteBtn = document.querySelector('.toggle-visibility[data-target-id="note"]');
+          showAlert(
+            "success",
+            "🎉 Thanh toán thành công!",
+            `Mã giao dịch: <strong>${state.transaction.code}</strong><br>Liên hệ admin để lấy key nhé!!`
+          );
+          el("resultBox").innerHTML =
+            '<div class="alert alert-success">✅ Đã xác nhận thanh toán. Vui lòng đợi admin xử lý.</div>';
+          el("confirmBtn").disabled = true;
+          setTimeout(() => {
+            el("orderForm").reset();
+            state.modal.hide();
+            el("confirmBtn").disabled = false;
+            state.transaction = null;
+            state.processing = false;
+            el("resultBox").innerHTML = "";
+          }, 5000);
+        };
 
-      if (noteElement) {
-        noteElement.textContent = '********************';
-        noteElement.classList.add('hidden-key');
-        noteElement.classList.remove('revealed-key');
-      }
-      if (toggleNoteBtn) {
-        toggleNoteBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
-        toggleNoteBtn.style.display = 'inline-flex'; // Hiển thị nút mắt cho nội dung
-      }
-    });
+        // Handle copy button clicks
+        const handleCopy = (e) => {
+          const btn = e.target.closest(".copy-btn");
+          if (!btn) return;
+          const textToCopy =
+            btn.dataset.text || el(btn.dataset.target)?.textContent;
+          if (!textToCopy) return;
 
-    // Logic hiện có cho nút thanh toán và tạo mã QR
-    document.getElementById('paymentButton').addEventListener('click', function () {
-      const game = document.getElementById('game').value;
-      const duration = document.getElementById('duration').value;
-      const discountCode = document.getElementById('discountCode').value;
+          // Use modern clipboard API if available
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard
+              .writeText(textToCopy)
+              .then(() => showToast("Đã sao chép!"))
+              .catch((err) => {
+                console.error("Failed to copy text: ", err);
+                showAlert(
+                  "error",
+                  "Lỗi sao chép!",
+                  "Không thể tự động sao chép. Vui lòng sao chép thủ công: " +
+                    textToCopy
+                );
+              });
+          } else {
+            // Fallback for older browsers
+            const textarea = document.createElement("textarea");
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              document.execCommand("copy");
+              showToast("Đã sao chép!");
+            } catch (err) {
+              console.error("Fallback copy failed: ", err);
+              showAlert(
+                "error",
+                "Lỗi sao chép!",
+                "Không thể tự động sao chép. Vui lòng sao chép thủ công: " +
+                  textToCopy
+              );
+            }
+            document.body.removeChild(textarea);
+          }
+        };
 
-      if (!game || !duration) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Lỗi!',
-          text: 'Vui lòng chọn Game và Thời hạn.',
-          confirmButtonText: 'Đã hiểu',
-          customClass: {
-            popup: 'custom-swal-popup',
-            title: 'custom-swal-title',
-            htmlContainer: 'custom-swal-text',
-            confirmButton: 'custom-swal-button'
-          },
-          buttonsStyling: false
-        });
-        return;
-      }
-
-      let amount = 0;
-      let productText = "";
-      switch (duration) {
-        case '1day':
-          amount = 2000;
-          productText = `${game} - 1 ngày`;
-          break;
-        case '7day':
-          amount = 40000;
-          productText = `${game} - 7 ngày`;
-          break;
-        case '30day':
-          amount = 100000;
-          productText = `${game} - 30 ngày`;
-          break;
-      }
-
-      // Áp dụng mã giảm giá (ví dụ)
-      if (discountCode === 'KHANHDEV') {
-        amount *= 0.9; // Giảm 10%
-        Swal.fire({
-          icon: 'success',
-          title: 'Áp dụng mã giảm giá!',
-          text: 'Mã KHANHDEV đã được áp dụng (giảm 10%).',
-          showConfirmButton: false,
-          timer: 2000,
-          customClass: {
-            popup: 'custom-swal-popup',
-            title: 'custom-swal-title',
-            htmlContainer: 'custom-swal-text',
-            confirmButton: 'custom-swal-button'
-          },
-          buttonsStyling: false
-        });
-      }
-
-      const orderCode = generateOrderCode(game, duration); // Tạo mã đơn hàng duy nhất
-      actualNote = orderCode; // Cập nhật biến actualNote với mã mới
-
-      document.getElementById('amount').textContent = `${amount.toLocaleString('vi-VN')}đ`;
-      document.getElementById('product').textContent = productText;
-
-      // Đặt lại text của Nội dung về placeholder và ẩn nó
-      const noteElement = document.getElementById('note');
-      const toggleNoteBtn = document.querySelector('.toggle-visibility[data-target-id="note"]');
-
-      if (noteElement) {
-        noteElement.textContent = '********************';
-        noteElement.classList.add('hidden-key');
-        noteElement.classList.remove('revealed-key');
-      }
-      if (toggleNoteBtn) {
-        toggleNoteBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
-        toggleNoteBtn.style.display = 'inline-flex'; // Hiển thị nút mắt cho nội dung
-      }
-
-      // Tạo mã QR bằng qrcode.js với định dạng URL chuyển khoản
-      // Sử dụng định dạng URL chuyển khoản của MBBank để QR code hợp lệ hơn
-      const qrText = `https://mb.com.vn/transfer?stk=${actualStk}&amount=${amount}&content=${encodeURIComponent(actualNote)}`;
-      const qrCodeContainer = document.getElementById('qrCodeContainer');
-      qrCodeContainer.innerHTML = ''; // Xóa QR cũ nếu có
-
-      new QRCode(qrCodeContainer, {
-        text: qrText,
-        width: 200,
-        height: 200,
-        colorDark: "#3b3b3b", // Màu từ --text-color
-        colorLight: "#f3f3ea", // Màu từ --card-bg
-        correctLevel: QRCode.CorrectLevel.H
+        // Initialize the page
+        renderGames();
+        document.getElementById("year").textContent = new Date().getFullYear();
+        state.modal = new bootstrap.Modal(el("paymentModal")); // Initialize Bootstrap modal instance
+        el("paymentButton").addEventListener("click", handlePayment);
+        el("confirmBtn").addEventListener("click", confirmPayment);
+        document.addEventListener("click", handleCopy); // Event delegation for copy buttons
       });
-
-      // Cập nhật link thanh toán (ví dụ, thay thế bằng link cổng thanh toán thực tế)
-      // document.getElementById('paymentLink').href = `https://mbbank.com.vn/transfer?stk=${actualStk}&amount=${amount}&content=${encodeURIComponent(actualNote)}`;
-
-      paymentModal.show(); // Hiển thị modal
-    });
-
-    function generateOrderCode(game, duration) {
-      const timestamp = Date.now().toString().slice(-6); // 6 chữ số cuối của timestamp
-      const gamePrefix = game.substring(0, 3).toUpperCase();
-      const durationPrefix = duration.substring(0, 2).toUpperCase();
-      return `ORDER_${gamePrefix}_${durationPrefix}_${timestamp}`;
-    }
-
-    document.getElementById('confirmBtn').addEventListener('click', function () {
-      Swal.fire({
-        icon: 'success',
-        title: 'Thanh toán đã được ghi nhận!',
-        text: 'Vui lòng đợi trong giây lát để hệ thống kiểm tra, bạn vui lòng liên hệ admin.',
-        confirmButtonText: 'Đóng',
-        customClass: {
-          popup: 'custom-swal-popup',
-          title: 'custom-swal-title',
-          htmlContainer: 'custom-swal-text',
-          confirmButton: 'custom-swal-button'
-        },
-        buttonsStyling: false
-      }).then(() => {
-        paymentModal.hide(); // Đóng Bootstrap modal sau khi xác nhận
-        // Tại đây bạn thường sẽ kích hoạt quá trình xác minh ở backend
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("orderForm");
+        if (form) form.addEventListener("submit", (e) => e.preventDefault());
       });
-    });
-
-    // Khởi tạo trạng thái ẩn cho Nội dung khi trang tải
-    document.addEventListener('DOMContentLoaded', () => {
-      const noteElement = document.getElementById('note');
-      const toggleNoteBtn = document.querySelector('.toggle-visibility[data-target-id="note"]');
-
-      // Ẩn nội dung và hiển thị placeholder
-      if (noteElement) {
-        noteElement.textContent = '********************';
-        noteElement.classList.add('hidden-key');
-        noteElement.classList.remove('revealed-key');
-      }
-      // Ẩn nút mắt ban đầu cho Nội dung (chỉ hiện khi modal được mở và có dữ liệu)
-      if (toggleNoteBtn) {
-        toggleNoteBtn.innerHTML = '<i class="fa-solid fa-eye"></i>'; // Đảm bảo icon đúng
-        toggleNoteBtn.style.display = 'none'; // Ẩn nút mắt cho nội dung khi trang tải
-      }
-    });
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
