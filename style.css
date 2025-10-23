@@ -14,6 +14,9 @@
         background-position: center;
         background-attachment: fixed;
         font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
 
 
@@ -25,6 +28,7 @@
         background-color: var(--card-bg);
         border-radius: 20px;
         animation: fadeInDown 1s ease;
+        flex-grow: 1; /* Cho phép container phát triển để đẩy footer xuống */
     }
 
 
@@ -145,6 +149,48 @@
         border-radius: 10px;
     }
 
+    /* ===== Modal Info Styles ===== */
+    #note, #product, #amount {
+        font-size: 1.1rem; /* Tăng kích thước chữ */
+        font-weight: 700; /* In đậm hơn */
+        color: var(--text-color); /* Màu chữ chính */
+        padding: 6px 12px;
+        background-color: var(--input-bg);
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color); /* Thêm viền trái để nhấn mạnh */
+    }
+    /* ===== Loader Styles ===== */
+    .loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(243, 243, 234, 0.8); /* Using a light overlay based on --card-bg */
+        backdrop-filter: blur(4px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .loader-overlay.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid var(--bg-dark);
+        border-top-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
     @keyframes fadeInDown {
         from {
             opacity: 0;
@@ -178,6 +224,12 @@
 
         100% {
             transform: scale(1);
+        }
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
         }
     }
 
@@ -243,4 +295,10 @@
     .alert {
         font-size: 14px;
     }
+}
+
+footer {
+    color: var(--text-color);
+    background-color: rgba(243, 243, 234, 0.7); /* Nền mờ nhẹ */
+    backdrop-filter: blur(4px);
 }
