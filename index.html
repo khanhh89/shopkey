@@ -75,14 +75,10 @@
         <h1 class="h4 mb-1">Shop Key Game</h1>
         <div class="text-muted">Thanh toán QR • Nhận key nhanh</div>
       </header>
-
-      <!-- DANH SÁCH GAME (render bằng JS của bạn) -->
       <section class="mb-4">
         <h2 class="h6 mb-3">Game / Ứng dụng</h2>
         <div id="gameList"></div>
       </section>
-
-      <!-- FORM ĐẶT HÀNG -->
       <section class="mb-5">
         <div class="card p-3">
           <form id="orderForm" class="row gy-3">
@@ -102,6 +98,8 @@
                 <option value="1day">1 ngày (2.500đ)</option>
                 <option value="7day">7 ngày (40.000đ)</option>
                 <option value="30day">30 ngày (100.000đ)</option>
+                <option value="30day">60 ngày (180.000đ)</option>
+                <option value="30day">90 ngày (240.000đ)</option>
               </select>
             </div>
             <div class="col-12 col-md-6">
@@ -109,7 +107,7 @@
               <input
                 id="discountCode"
                 class="form-control"
-                placeholder="GIAM10 / GIAM30 / FREE100"
+                placeholder="GIAM10 / GIAM30"
               />
             </div>
             <div class="col-12 d-flex align-items-end">
@@ -248,16 +246,16 @@
 
         const discountCodes = {
           GIAM10: { value: 0.1, description: "Giảm 10%" },
-          GIAM30: { value: 0.3, description: "Giảm 30%" },
-          FREE100: { value: 1, description: "Miễn phí" },
+          GIAM30: { value: 0.2, description: "Giảm 20%" },
+          // FREE100: { value: 1, description: "Miễn phí" },
         };
 
         const priceConfig = {
           "1day": { amount: 2000, display: "1 ngày" },
           "7day": { amount: 40000, display: "7 ngày" },
           "30day": { amount: 100000, display: "30 ngày" },
-          "60day": { amount: 150000, display: "60 ngày" },
-          "90day": { amount: 220000, display: "90 ngày" },
+          "60day": { amount: 180000, display: "60 ngày" },
+          "90day": { amount: 240000, display: "90 ngày" },
         };
         const el = (id) => document.getElementById(id);
         const state = {
