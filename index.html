@@ -17,8 +17,7 @@
       body {
         background: #0f172a;
         color: #e2e8f0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
-          Arial;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       }
       .container-narrow {
         max-width: 880px;
@@ -67,6 +66,21 @@
         background: #3b82f6;
         border: 0;
       }
+      .bank-badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border: 1px solid #1f2a44;
+        border-radius: 10px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+        font-size: 12px;
+        color: #cbd5e1;
+        background: #0b1220;
+      }
+      .small-dim {
+        color: #93a4c0;
+        font-size: 12px;
+      }
     </style>
   </head>
   <body>
@@ -75,10 +89,12 @@
         <h1 class="h4 mb-1">Shop Key Game</h1>
         <div class="text-muted">Thanh toán QR • Nhận key nhanh</div>
       </header>
+
       <section class="mb-4">
         <h2 class="h6 mb-3">Game / Ứng dụng</h2>
         <div id="gameList"></div>
       </section>
+
       <section class="mb-5">
         <div class="card p-3">
           <form id="orderForm" class="row gy-3">
@@ -86,30 +102,46 @@
               <label class="form-label" for="game">Chọn game</label>
               <select id="game" class="form-select">
                 <option value="">-- Chọn --</option>
-                <option value="Liên Quân Mobile ADR">
-                  Liên Quân Mobile ADR
-                </option>
+                <option value="Liên Quân Mobile ADR">Liên Quân Mobile ADR</option>
               </select>
             </div>
+
             <div class="col-12 col-md-6">
               <label class="form-label" for="duration">Thời hạn</label>
               <select id="duration" class="form-select">
                 <option value="">-- Chọn --</option>
-                <option value="1day">1 ngày (2.500đ)</option>
+                <option value="1day">1 ngày (2.000đ)</option>
                 <option value="7day">7 ngày (40.000đ)</option>
                 <option value="30day">30 ngày (100.000đ)</option>
-                <option value="30day">60 ngày (180.000đ)</option>
-                <option value="30day">90 ngày (240.000đ)</option>
+                <option value="60day">60 ngày (180.000đ)</option>
+                <option value="90day">90 ngày (240.000đ)</option>
               </select>
             </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="bankApp">Chọn ngân hàng</label>
+              <select id="bankApp" class="form-select">
+                <option value="mb">MB Bank (khuyến nghị)</option>
+                <option value="vcb">Vietcombank</option>
+                <option value="bidv">BIDV</option>
+                <option value="tcb">Techcombank</option>
+                <option value="acb">ACB</option>
+                <option value="vpb">VPBank</option>
+                <option value="vtb">VietinBank</option>
+                <option value="tpb">TPBank</option>
+                <option value="scb">Sacombank</option>
+                <option value="agb">Agribank</option>
+              </select>
+              <div class="small-dim mt-2">
+                Hệ thống sẽ thử mở trực tiếp app. Nếu không được, hãy dùng nút/fallback hoặc quét QR.
+              </div>
+            </div>
+
             <div class="col-12 col-md-6">
               <label class="form-label" for="discountCode">Mã giảm giá</label>
-              <input
-                id="discountCode"
-                class="form-control"
-                placeholder="GIAM10 / GIAM30"
-              />
+              <input id="discountCode" class="form-control" placeholder="GIAM10 / GIAM20" />
             </div>
+
             <div class="col-12 d-flex align-items-end">
               <button type="button" id="paymentButton" class="btn btn-success">
                 Tiếp tục thanh toán
@@ -120,20 +152,11 @@
       </section>
 
       <!-- MODAL THANH TOÁN -->
-      <div
-        class="modal fade"
-        id="paymentModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div
             class="modal-content"
-            style="
-              background: #0b1220;
-              color: #e2e8f0;
-              border: 1px solid #1f2a44;
-            "
+            style="background: #0b1220; color: #e2e8f0; border: 1px solid #1f2a44"
           >
             <div class="modal-header">
               <h5 class="modal-title">Thanh toán & Xác nhận</h5>
@@ -164,13 +187,20 @@
                         </button>
                       </div>
                     </div>
+
                     <div class="mb-2">
                       <div class="text-muted small">Sản phẩm</div>
                       <div id="product" class="fw-semibold"></div>
                     </div>
-                    <div>
+
+                    <div class="mb-3">
                       <div class="text-muted small">Số tiền</div>
                       <div id="amount" class="fw-semibold"></div>
+                    </div>
+
+                    <div>
+                      <div class="text-muted small">Ngân hàng</div>
+                      <div id="bankLabel" class="fw-semibold"></div>
                     </div>
                   </div>
                 </div>
@@ -178,28 +208,35 @@
                 <div class="col-md-6">
                   <div class="card p-3 text-center">
                     <div class="mb-2">Quét QR để thanh toán</div>
-                    <!-- ảnh QR do JS của bạn set src -->
                     <img
                       id="qrImage"
                       alt="QR"
-                      style="
-                        max-width: 100%;
-                        border-radius: 8px;
-                        border: 1px solid #1f2a44;
-                      "
+                      style="max-width: 100%; border-radius: 8px; border: 1px solid #1f2a44"
                     />
-                    <div class="mt-2">
+                    <div class="mt-2 d-grid gap-2">
                       <a
                         id="paymentLink"
                         class="btn btn-outline-info btn-sm"
                         target="_blank"
                         rel="noopener"
                       >
-                        Mở trang MBBank
+                        Mở bằng app đã chọn
                       </a>
+                      <button id="retryOpenApp" class="btn btn-outline-light btn-sm" type="button">
+                        Thử mở lại app
+                      </button>
+                      <div class="small-dim">
+                        Nếu ứng dụng không mở, vui lòng dùng nút trên hoặc quét QR.
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div class="mt-3">
+                <span class="bank-badge">Bảo lưu QR để dùng lại trong 5 phút</span>
+                <span class="bank-badge">Nội dung chuyển khoản = Mã giao dịch</span>
+                <span class="bank-badge">Sai số tiền hoặc sai nội dung có thể chậm xử lý</span>
               </div>
             </div>
 
@@ -207,11 +244,7 @@
               <button type="button" id="confirmBtn" class="btn btn-primary">
                 Tôi đã thanh toán
               </button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 Đóng
               </button>
             </div>
@@ -223,8 +256,49 @@
         © <span id="year"></span> Shop Key Game
       </footer>
     </div>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        /*************** CẤU HÌNH TÀI KHOẢN & NGÂN HÀNG ***************/
+        // Số tài khoản nhận tiền
+        const ACCOUNT_NO = "075020699999";
+        // Bank code ISO/Napas của tài khoản để tạo QR (ví dụ MB = MBBank)
+        // Dùng để sinh ảnh QR theo dịch vụ sepay/vietqr. Có thể đổi theo ngân hàng của bạn.
+        const ACCOUNT_BANK_CODE = "MBBank";
+
+        // Map tên hiển thị cho select ngân hàng
+        const BANK_DISPLAY = {
+          mb: "MB Bank",
+          vcb: "Vietcombank",
+          bidv: "BIDV",
+          tcb: "Techcombank",
+          acb: "ACB",
+          vpb: "VPBank",
+          vtb: "VietinBank",
+          tpb: "TPBank",
+          scb: "Sacombank",
+          agb: "Agribank",
+        };
+
+        // Map app code cho VietQR deeplink (dl.vietqr.io)
+        // Lưu ý: app code thực tế do VietQR định nghĩa; ở đây đặt theo thông lệ thường dùng.
+        const VIETQR_APP = {
+          mb: "mb",
+          vcb: "vcb",
+          bidv: "bidv",
+          tcb: "techcombank",
+          acb: "acb",
+          vpb: "vpbank",
+          vtb: "vietinbank",
+          tpb: "tpbank",
+          scb: "sacombank",
+          agb: "agribank",
+        };
+
+        // Android package name của MB Bank để mở bằng Intent
+        const MB_ANDROID_PKG = "com.mbmobile";
+
+        /******************** DỮ LIỆU ỨNG DỤNG ********************/
         const games = [
           {
             title: "Liên Quân Mobile ADR",
@@ -246,8 +320,7 @@
 
         const discountCodes = {
           GIAM10: { value: 0.1, description: "Giảm 10%" },
-          GIAM30: { value: 0.2, description: "Giảm 20%" },
-          // FREE100: { value: 1, description: "Miễn phí" },
+          GIAM20: { value: 0.2, description: "Giảm 20%" },
         };
 
         const priceConfig = {
@@ -257,37 +330,31 @@
           "60day": { amount: 180000, display: "60 ngày" },
           "90day": { amount: 240000, display: "90 ngày" },
         };
+
+        /******************** TIỆN ÍCH ********************/
         const el = (id) => document.getElementById(id);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
         const state = {
           modal: null,
           transaction: null,
           processing: false,
         };
-        const renderGames = () => {
-          const container = el("gameList");
-          container.innerHTML = games
-            .map(
-              (game) => `
-            <div class="game-card">
-                <img src="${game.image}" alt="${
-                game.title
-              }" class="game-image" onerror="this.src='https://via.placeholder.com/180?text=Image+Not+Found'">
-                <div class="game-content">
-                    <h4 class="game-title">${game.title}</h4>
-                    ${game.links
-                      .map(
-                        (link) =>
-                          `<a href="${link.url}" ${
-                            link.url !== "#" ? 'target="_blank"' : ""
-                          } class="btn btn-primary game-btn">${link.text}</a>`
-                      )
-                      .join("")}
-                </div>
-            </div>
-        `
-            )
-            .join("");
-        };
+
+        const showAlert = (icon, title, html) =>
+          Swal.fire({ icon, title, html, confirmButtonColor: "#16a34a" });
+
+        const showToast = (msg) =>
+          Swal.fire({
+            icon: "success",
+            title: msg,
+            toast: true,
+            position: "top-end",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+
         const applyDiscount = (code, amount) => {
           const dc = discountCodes[code];
           if (!dc)
@@ -302,98 +369,179 @@
           };
         };
 
-        // Update modal content with transaction details
-        const updateModal = ({ code, product, amount, message }) => {
-          el("note").textContent = code;
-          el("product").textContent = product;
-          el("amount").textContent = amount.toLocaleString("vi-VN") + " VNĐ";
+        const renderGames = () => {
+          const container = el("gameList");
+          container.innerHTML = games
+            .map(
+              (game) => `
+              <div class="game-card">
+                <img src="${game.image}" alt="${
+                  game.title
+                }" class="game-image" onerror="this.src='https://via.placeholder.com/180?text=Image+Not+Found'">
+                <div class="game-content">
+                  <h4 class="game-title">${game.title}</h4>
+                  ${game.links
+                    .map(
+                      (link) =>
+                        `<a href="${link.url}" ${
+                          link.url !== "#" ? 'target="_blank"' : ""
+                        } class="btn btn-primary game-btn">${link.text}</a>`
+                    )
+                    .join("")}
+                </div>
+              </div>`
+            )
+            .join("");
+        };
 
-          // Generate QR code URL based on transaction details
-          el(
-            "qrImage"
-          ).src = `https://qr.sepay.vn/img?acc=075020699999&bank=MBBank&amount=${amount}&des=${code}&template=compact`;
-
-          // Construct MBBank payment link
-          el(
-            "paymentLink"
-          ).href = `https://mbbank.com.vn/QRTransfer?bankId=MB&accountNo=075020699999&amount=${amount}&content=${encodeURIComponent(
+        /******************** DEEPLINK BUILDER ********************/
+        // Link web MBBank (có thể là universal link trên iOS)
+        const buildMBWeb = (amount, code) =>
+          `https://mbbank.com.vn/QRTransfer?bankId=MB&accountNo=${ACCOUNT_NO}&amount=${amount}&content=${encodeURIComponent(
             code
           )}`;
 
-          // Display discount message
+        // Android Intent mở thẳng app MB
+        const buildMBIntent = (amount, code) =>
+          `intent://mbbank.com.vn/QRTransfer?bankId=MB&accountNo=${ACCOUNT_NO}&amount=${amount}&content=${encodeURIComponent(
+            code
+          )}#Intent;scheme=https;package=${MB_ANDROID_PKG};end`;
+
+        // VietQR Deeplink: điều hướng tới app ngân hàng tương ứng (nếu hỗ trợ)
+        // Lưu ý: nếu app chưa cài, có thể không mở được — UI đã có QR và nút mở lại.
+        const buildVietQRLink = (appCode, amount, code) =>
+          `https://dl.vietqr.io/pay?app=${appCode}&acc=${ACCOUNT_NO}&amount=${amount}&note=${encodeURIComponent(
+            code
+          )}`;
+
+        // Ảnh QR (mã nội dung: code, số tiền: amount)
+        // Bạn có thể đổi sang img.vietqr.io nếu muốn.
+        const buildQRImage = (amount, code) =>
+          `https://qr.sepay.vn/img?acc=${ACCOUNT_NO}&bank=${encodeURIComponent(
+            ACCOUNT_BANK_CODE
+          )}&amount=${amount}&des=${encodeURIComponent(
+            code
+          )}&template=compact`;
+
+        // Nhãn đẹp cho ngân hàng
+        const labelOfBank = (bankKey) => BANK_DISPLAY[bankKey] || "Ngân hàng khác";
+
+        // Mở app theo lựa chọn người dùng
+        function openBankApp({ bankKey, amount, code, auto = false }) {
+          const a = el("paymentLink");
+          let href = "#";
+
+          if (bankKey === "mb") {
+            const baseWeb = buildMBWeb(amount, code);
+            const androidIntent = buildMBIntent(amount, code);
+            href = baseWeb; // đặt cho nút
+
+            if (auto && (isAndroid || isIOS)) {
+              if (isAndroid) {
+                // Thử Intent -> fallback web
+                window.location.href = androidIntent;
+                setTimeout(() => {
+                  try {
+                    window.location.href = baseWeb;
+                  } catch (_) {}
+                }, 1200);
+              } else {
+                // iOS: mở universal link (nếu app hỗ trợ sẽ vào app, nếu không thì web)
+                window.location.href = baseWeb;
+              }
+            }
+          } else {
+            const appCode = VIETQR_APP[bankKey] || "mb";
+            const vietqr = buildVietQRLink(appCode, amount, code);
+            href = vietqr;
+
+            if (auto && (isAndroid || isIOS)) {
+              // Thử mở app qua VietQR deeplink
+              window.location.href = vietqr;
+              // Không bắt buộc fallback ở đây vì người dùng vẫn đang ở modal và có QR sẵn
+            }
+          }
+
+          a.href = href; // luôn gán để user có thể bấm lại
+        }
+
+        /******************** UI CẬP NHẬT MODAL ********************/
+        function updateModal({ code, product, amount, bankKey, message }) {
+          el("note").textContent = code;
+          el("product").textContent = product;
+          el("amount").textContent = amount.toLocaleString("vi-VN") + " VNĐ";
+          el("bankLabel").textContent = labelOfBank(bankKey);
+
+          // Set QR image
+          el("qrImage").src = buildQRImage(amount, code);
+
+          // Thông báo áp mã giảm giá (nếu có)
           el("resultBox").innerHTML = message
             ? `<div class="alert alert-${
                 amount === 0 ? "warning" : "success"
               }">${message}</div>`
             : "";
-        };
-
-        // Generic SweetAlert2 alert function
-        const showAlert = (icon, title, html) =>
-          Swal.fire({ icon, title, html, confirmButtonColor: "#16a34a" });
-
-        // Generic SweetAlert2 toast notification
-        const showToast = (msg) =>
-          Swal.fire({
-            icon: "success",
-            title: msg,
-            toast: true,
-            position: "top-end",
-            timer: 2000,
-            showConfirmButton: false,
-          });
-
-        // Handle payment button click
-        const handlePayment = () => {
-          if (state.processing) return; 
+          openBankApp({ bankKey, amount, code, auto: false });
+        }
+        function handlePayment() {
+          if (state.processing) return;
           state.processing = true;
+
           const game = el("game")?.value;
           const duration = el("duration")?.value;
+          const bankKey = el("bankApp")?.value || "mb";
           const discountCode = el("discountCode")?.value.trim().toUpperCase();
           const config = priceConfig[duration];
+
           if (!game || !config) {
-            showAlert(
-              "error",
-              "Thiếu thông tin!",
-              "Vui lòng chọn game và thời hạn."
-            );
+            showAlert("error", "Thiếu thông tin!", "Vui lòng chọn game và thời hạn.");
             state.processing = false;
             return;
           }
 
           const discountResult = applyDiscount(discountCode, config.amount);
-          const transCode = "DXK" + Math.floor(1000 + Math.random() * 9000); // Unique transaction code
+          const transCode = "DXK" + Math.floor(1000 + Math.random() * 9000);
           const product = `${config.display} | ${game}`;
 
           state.transaction = {
             code: transCode,
             product,
             amount: discountResult.final,
+            bankKey,
           };
-
           updateModal({
             code: transCode,
             product,
             amount: discountResult.final,
+            bankKey,
             message: discountResult.msg,
           });
-          state.modal.show(); // Show the Bootstrap modal
-          state.processing = false;
-        };
 
-        // Handle payment confirmation
-        const confirmPayment = () => {
+          state.modal.show();
+          openBankApp({
+            bankKey,
+            amount: discountResult.final,
+            code: transCode,
+            auto: true,
+          });
+
+          state.processing = false;
+        }
+
+        function confirmPayment() {
           if (!state.transaction || state.processing) return;
           state.processing = true;
 
           showAlert(
             "success",
             "🎉 Thanh toán thành công!",
-            `Mã giao dịch: <strong>${state.transaction.code}</strong><br>Liên hệ admin để lấy key nhé!!`
+            `Mã giao dịch: <strong>${state.transaction.code}</strong><br>Liên hệ admin để lấy key nhé!`
           );
+
           el("resultBox").innerHTML =
             '<div class="alert alert-success">✅ Đã xác nhận thanh toán. Vui lòng đợi admin xử lý.</div>';
           el("confirmBtn").disabled = true;
+
           setTimeout(() => {
             el("orderForm").reset();
             state.modal.hide();
@@ -402,17 +550,14 @@
             state.processing = false;
             el("resultBox").innerHTML = "";
           }, 5000);
-        };
+        }
 
-        // Handle copy button clicks
-        const handleCopy = (e) => {
+        function handleCopy(e) {
           const btn = e.target.closest(".copy-btn");
           if (!btn) return;
-          const textToCopy =
-            btn.dataset.text || el(btn.dataset.target)?.textContent;
+          const textToCopy = btn.dataset.text || el(btn.dataset.target)?.textContent;
           if (!textToCopy) return;
 
-          // Use modern clipboard API if available
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard
               .writeText(textToCopy)
@@ -422,12 +567,10 @@
                 showAlert(
                   "error",
                   "Lỗi sao chép!",
-                  "Không thể tự động sao chép. Vui lòng sao chép thủ công: " +
-                    textToCopy
+                  "Không thể tự động sao chép. Vui lòng sao chép thủ công: " + textToCopy
                 );
               });
           } else {
-            // Fallback for older browsers
             const textarea = document.createElement("textarea");
             textarea.value = textToCopy;
             document.body.appendChild(textarea);
@@ -440,25 +583,30 @@
               showAlert(
                 "error",
                 "Lỗi sao chép!",
-                "Không thể tự động sao chép. Vui lòng sao chép thủ công: " +
-                  textToCopy
+                "Không thể tự động sao chép. Vui lòng sao chép thủ công: " + textToCopy
               );
             }
             document.body.removeChild(textarea);
           }
-        };
+        }
 
-        // Initialize the page
+        function retryOpen() {
+          if (!state.transaction) return;
+          openBankApp({
+            bankKey: state.transaction.bankKey,
+            amount: state.transaction.amount,
+            code: state.transaction.code,
+            auto: true,
+          });
+        }
         renderGames();
         document.getElementById("year").textContent = new Date().getFullYear();
-        state.modal = new bootstrap.Modal(el("paymentModal")); // Initialize Bootstrap modal instance
+
+        state.modal = new bootstrap.Modal(el("paymentModal"));
         el("paymentButton").addEventListener("click", handlePayment);
         el("confirmBtn").addEventListener("click", confirmPayment);
-        document.addEventListener("click", handleCopy); // Event delegation for copy buttons
-      });
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
+        el("retryOpenApp").addEventListener("click", retryOpen);
+        document.addEventListener("click", handleCopy);
         const form = document.getElementById("orderForm");
         if (form) form.addEventListener("submit", (e) => e.preventDefault());
       });
