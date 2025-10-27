@@ -292,30 +292,27 @@
         const MB_ANDROID_PKG = "com.mbmobile";
 
         const games = [
-  {
-    title: "Liên Quân Mobile",
-    image:
-      "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
-    androidLinks: [
-      {
-        text: "Tải tách gốc (Android/ADR)",
-        url: "https://www.mediafire.com/file/z8tqbiufur3uely/MAP2.9+FIX+V%C4%82NG+_+T%C3%81CH.apk/file",
-      },
-      {
-        text: "Tải xóa gốc (Android/ADR)",
-        url: "https://www.mediafire.com/file/28o2ln5md8h1oml/2.9+FIX+CRASH+(+L%E1%BA%A6N+2).apk/file",
-      },
-      { text: "Lấy Key Free", url: "https://link4m.com/hP9L1U" },
-    ],
-    iosLinks: [
-      {
-        text: "Tải IPA iOS",
-        url: "https://link4m.com/EyQspkb",
-      },
-      { text: "Lấy Key Free", url: "https://link4m.com/hP9L1U" },
-    ],
-  },
-];
+          {
+            title: "Liên Quân Mobile",
+            // ảnh tổng nếu muốn hiển thị ở nơi khác, có thể giữ lại `image`
+            image: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
+        
+            // ẢNH RIÊNG MỖI NỀN TẢNG
+            androidImage: "https://i.imgur.com/7Xr4QqW.jpeg", // 👉 thay link ảnh Android bạn muốn
+            iosImage: "https://i.imgur.com/HkL5m0g.jpeg",      // 👉 thay link ảnh iOS bạn muốn
+        
+            androidLinks: [
+              { text: "Tải tách gốc (Android/ADR)", url: "https://www.mediafire.com/file/z8tqbiufur3uely/MAP2.9+FIX+V%C4%82NG+_+T%C3%81CH.apk/file" },
+              { text: "Tải xóa gốc (Android/ADR)",  url: "https://www.mediafire.com/file/28o2ln5md8h1oml/2.9+FIX+CRASH+(+L%E1%BA%A6N+2).apk/file" },
+              { text: "Lấy Key Free",               url: "https://link4m.com/hP9L1U" },
+            ],
+            iosLinks: [
+              { text: "Tải IPA iOS",  url: "https://link4m.com/EyQspkb" },
+              { text: "Lấy Key Free", url: "https://link4m.com/hP9L1U" },
+            ],
+          },
+        ];
+
 
 
         const discountCodes = {
@@ -368,43 +365,83 @@
           };
         };
 
-       const renderGames = () => {
-  const container = el("gameList");
-  container.innerHTML = games
-    .map((game) => {
-      const androidBlock = game.androidLinks?.length
-        ? `
-          <div class="mt-2">
-            <div class="small text-muted mb-1">Android (ADR)</div>
-            ${game.androidLinks
-              .map(
-                (link) => `
-                  <a href="${link.url}" ${
-                    link.url !== "#" ? 'target="_blank"' : ""
-                  } class="btn btn-primary game-btn">${link.text}</a>
-                `
-              )
-              .join("")}
-          </div>
-        `
-        : "";
+          const renderGames = () => {
+            const container = el("gameList");
+            container.innerHTML = games
+              .map((game) => {
+                const androidBlock = game.androidLinks?.length
+                  ? `
+                    <div class="mt-2">
+                      <div class="small text-muted mb-2">Android (ADR)</div>
+                      <div class="d-flex gap-3 align-items-start platform-block">
+                        <img
+                          src="${game.androidImage || game.image || ''}"
+                          alt="Android"
+                          class="platform-image"
+                          onerror="this.src='https://via.placeholder.com/120x80?text=Android'"
+                        />
+                        <div class="d-flex flex-wrap">
+                          ${game.androidLinks
+                            .map(
+                              (link) => `
+                                <a href="${link.url}" ${
+                                  link.url !== "#" ? 'target="_blank"' : ""
+                                } class="btn btn-primary game-btn">${link.text}</a>
+                              `
+                            )
+                            .join("")}
+                        </div>
+                      </div>
+                    </div>
+                  `
+                  : "";
+          
+                const iosBlock = game.iosLinks?.length
+                  ? `
+                    <div class="mt-3">
+                      <div class="small text-muted mb-2">iOS</div>
+                      <div class="d-flex gap-3 align-items-start platform-block">
+                        <img
+                          src="${game.iosImage || game.image || ''}"
+                          alt="iOS"
+                          class="platform-image"
+                          onerror="this.src='https://via.placeholder.com/120x80?text=iOS'"
+                        />
+                        <div class="d-flex flex-wrap">
+                          ${game.iosLinks
+                            .map(
+                              (link) => `
+                                <a href="${link.url}" ${
+                                  link.url !== "#" ? 'target="_blank"' : ""
+                                } class="btn btn-primary game-btn">${link.text}</a>
+                              `
+                            )
+                            .join("")}
+                        </div>
+                      </div>
+                    </div>
+                  `
+                  : "";
+          
+                return `
+                  <div class="game-card">
+                    <img
+                      src="${game.image}"
+                      alt="${game.title}"
+                      class="game-image"
+                      onerror="this.src='https://via.placeholder.com/180?text=Image+Not+Found'"
+                    />
+                    <div class="game-content">
+                      <h4 class="game-title">${game.title}</h4>
+                      ${androidBlock}
+                      ${iosBlock}
+                    </div>
+                  </div>
+                `;
+              })
+              .join("");
+          };
 
-      const iosBlock = game.iosLinks?.length
-        ? `
-          <div class="mt-3">
-            <div class="small text-muted mb-1">iOS</div>
-            ${game.iosLinks
-              .map(
-                (link) => `
-                  <a href="${link.url}" ${
-                    link.url !== "#" ? 'target="_blank"' : ""
-                  } class="btn btn-primary game-btn">${link.text}</a>
-                `
-              )
-              .join("")}
-          </div>
-        `
-        : "";
 
       return `
         <div class="game-card">
