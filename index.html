@@ -121,7 +121,7 @@
               <label class="form-label" for="duration">Thời hạn</label>
               <select id="duration" class="form-select">
                 <option value="">-- Chọn --</option>
-                <option value="1day">1 ngày (2.000đ)</option>
+                <option value="1day">1 ngày (4.000đ)</option>
                 <option value="7day">7 ngày (50.000đ)</option>
                 <option value="30day">30 ngày (100.000đ)</option>
                 <option value="60day">60 ngày (180.000đ)</option>
@@ -150,7 +150,7 @@
 
             <div class="col-12 col-md-6">
               <label class="form-label" for="discountCode">Mã giảm giá</label>
-              <input id="discountCode" class="form-control" placeholder="GIAM10 / GIAM20" />
+              <input id="discountCode" class="form-control" placeholder="GIAM10" />
             </div>
 
             <div class="col-12 d-flex align-items-end">
@@ -302,12 +302,8 @@
         const games = [
           {
             title: "Liên Quân Mobile",
-            // ảnh tổng nếu muốn hiển thị ở nơi khác, có thể giữ lại `image`
-            image: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
-        
-            // ẢNH RIÊNG MỖI NỀN TẢNG
-            androidImage: "https://i.imgur.com/7Xr4QqW.jpeg", // 👉 thay link ảnh Android bạn muốn
-            iosImage: "https://i.imgur.com/HkL5m0g.jpeg",      // 👉 thay link ảnh iOS bạn muốn
+            androidImage: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
+            iosImage: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
         
             androidLinks: [
               { text: "Tải tách gốc (Android/ADR)", url: "https://www.mediafire.com/file/z8tqbiufur3uely/MAP2.9+FIX+V%C4%82NG+_+T%C3%81CH.apk/file" },
@@ -328,7 +324,7 @@
         };
 
         const priceConfig = {
-          "1day": { amount: 2000, display: "1 ngày" },
+          "1day": { amount: 4000, display: "1 ngày" },
           "7day": { amount: 50000, display: "7 ngày" },
           "30day": { amount: 100000, display: "30 ngày" },
           "60day": { amount: 180000, display: "60 ngày" },
@@ -451,9 +447,6 @@
               .join("");
           };
         // KẾT THÚC PHẦN SỬA LỖI LOGIC
-
-        /******************** DEEPLINK BUILDER ********************/
-        // Link web MBBank (có thể là universal link trên iOS)
         const buildMBWeb = (amount, code) =>
           `https://mbbank.com.vn/QRTransfer?bankId=MB&accountNo=${ACCOUNT_NO}&amount=${amount}&content=${encodeURIComponent(
             code
