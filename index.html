@@ -27,7 +27,6 @@
         border-radius: 14px;
       }
 
-
       .game-title {
         margin: 0 0 8px;
         color: #e2e8f0;
@@ -62,10 +61,10 @@
         background: #0b1220;
       }
       .small-dim {
-        color: #93a3b8; /* Cố định màu */
+        color: #93a3b8;
         font-size: 12px;
       }
-      /* CSS cho ảnh nền tảng nhỏ hơn */
+      /* Ảnh nền tảng nhỏ (Android / iOS) */
       .platform-image {
         width: 120px;
         height: 80px;
@@ -74,7 +73,7 @@
         border: 1px solid #1f2a44;
       }
       .platform-block {
-          align-items: flex-start !important; /* Đảm bảo căn trên */
+        align-items: flex-start !important;
       }
     </style>
   </head>
@@ -129,7 +128,7 @@
                 <option value="agb">Agribank</option>
               </select>
               <div class="small-dim mt-2">
-                Hệ thống sẽ thử mở trực tiếp app. Nếu không được, hãy dùng nút/fallback hoặc quét QR.
+                Hệ thống sẽ tạo QR kèm nội dung chuyển khoản. Bạn chỉ cần thanh toán đúng nội dung và số tiền.
               </div>
             </div>
 
@@ -215,10 +214,10 @@
                         target="_blank"
                         rel="noopener"
                       >
-                        Mở bằng app đã chọn
+                        Mở link thanh toán
                       </a>
                       <button id="retryOpenApp" class="btn btn-outline-light btn-sm" type="button">
-                        Thử mở lại app
+                        Thử mở lại link
                       </button>
                       <div class="small-dim">
                         Nếu ứng dụng không mở, vui lòng dùng nút trên hoặc quét QR.
@@ -258,6 +257,7 @@
         // Số tài khoản nhận tiền
         const ACCOUNT_NO = "075020699999";
         const ACCOUNT_BANK_CODE = "MBBank";
+
         const BANK_DISPLAY = {
           mb: "MB Bank",
           vcb: "Vietcombank",
@@ -274,7 +274,7 @@
           mb: "mb",
           vcb: "vcb",
           bidv: "bidv",
-          tcb: "techcomcombank", // Thường là 'tcb' hoặc 'techcombank'
+          tcb: "techcomcombank", // có thể đổi nếu app code khác
           acb: "acb",
           vpb: "vpbank",
           vtb: "vietinbank",
@@ -287,22 +287,28 @@
         const games = [
           {
             title: "Liên Quân Mobile",
-            androidImage: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
-            iosImage: "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
-        
+            androidImage:
+              "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
+            iosImage:
+              "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/07/THUMB.jpg",
+
             androidLinks: [
-              { text: "Tải tách gốc (Android/ADR)", url: "https://www.mediafire.com/file/z8tqbiufur3uely/MAP2.9+FIX+V%C4%82NG+_+T%C3%81CH.apk/file" },
-              { text: "Tải xóa gốc (Android/ADR)",  url: "https://www.mediafire.com/file/28o2ln5md8h1oml/2.9+FIX+CRASH+(+L%E1%BA%A6N+2).apk/file" },
-              { text: "Lấy Key Free",               url: "https://link4m.com/hP9L1U" },
+              {
+                text: "Tải tách gốc (Android/ADR)",
+                url: "https://www.mediafire.com/file/z8tqbiufur3uely/MAP2.9+FIX+V%C4%82NG+_+T%C3%81CH.apk/file",
+              },
+              {
+                text: "Tải xóa gốc (Android/ADR)",
+                url: "https://www.mediafire.com/file/28o2ln5md8h1oml/2.9+FIX+CRASH+(+L%E1%BA%A6N+2).apk/file",
+              },
+              { text: "Lấy Key Free", url: "https://link4m.com/hP9L1U" },
             ],
             iosLinks: [
-              { text: "Tải IPA iOS",  url: "https://link4m.com/EyQspkb" },
+              { text: "Tải IPA iOS", url: "https://link4m.com/EyQspkb" },
               { text: "Lấy Key Free", url: "https://link4m.com/hP9L1U" },
             ],
           },
         ];
-
-
 
         const discountCodes = {
           GIAM10: { value: 0.1, description: "Giảm 10%" },
@@ -354,104 +360,96 @@
           };
         };
 
-        // BẮT ĐẦU PHẦN SỬA LỖI LOGIC TẠI ĐÂY
+        /******************** RENDER GAME LIST ********************/
+        // ĐÃ XOÁ THẺ ẢNH CHUNG CỦA GAME. MỖI GAME GIỜ CHỈ HIỂN THỊ TIÊU ĐỀ + CÁC BLOCK ANDROID / IOS
         const renderGames = () => {
-            const container = el("gameList");
-            container.innerHTML = games
-              .map((game) => {
-                const androidBlock = game.androidLinks?.length
-                  ? `
-                      <div class="mt-2">
-                        <div class="small text-muted mb-2">Android (ADR)</div>
-                        <div class="d-flex gap-3 align-items-start platform-block">
-                          <img
-                            src="${game.androidImage || game.image || ''}"
-                            alt="Android"
-                            class="platform-image"
-                            onerror="this.src='https://via.placeholder.com/120x80?text=Android'"
-                          />
-                          <div class="d-flex flex-wrap">
-                            ${game.androidLinks
-                              .map(
-                                (link) => `
-                                  <a href="${link.url}" ${
-                                    link.url !== "#" ? 'target="_blank"' : ""
-                                  } class="btn btn-primary game-btn">${link.text}</a>
-                                `
-                              )
-                              .join("")}
-                          </div>
-                        </div>
-                      </div>
-                    `
-                  : "";
-            
-                const iosBlock = game.iosLinks?.length
-                  ? `
-                      <div class="mt-3">
-                        <div class="small text-muted mb-2">iOS</div>
-                        <div class="d-flex gap-3 align-items-start platform-block">
-                          <img
-                            src="${game.iosImage || game.image || ''}"
-                            alt="iOS"
-                            class="platform-image"
-                            onerror="this.src='https://via.placeholder.com/120x80?text=iOS'"
-                          />
-                          <div class="d-flex flex-wrap">
-                            ${game.iosLinks
-                              .map(
-                                (link) => `
-                                  <a href="${link.url}" ${
-                                    link.url !== "#" ? 'target="_blank"' : ""
-                                  } class="btn btn-primary game-btn">${link.text}</a>
-                                `
-                              )
-                              .join("")}
-                          </div>
-                        </div>
-                      </div>
-                    `
-                  : "";
-            
-                return `
-                    <div class="game-card">
+          const container = el("gameList");
+          container.innerHTML = games
+            .map((game) => {
+              const androidBlock = game.androidLinks?.length
+                ? `
+                  <div class="mt-2">
+                    <div class="small text-muted mb-2">Android (ADR)</div>
+                    <div class="d-flex gap-3 align-items-start platform-block">
                       <img
-                        src="${game.image}"
-                        alt="${game.title}"
-                        class="game-image"
-                        onerror="this.src='https://via.placeholder.com/180?text=Image+Not+Found'"
+                        src="${game.androidImage || ""}"
+                        alt="Android"
+                        class="platform-image"
+                        onerror="this.src='https://via.placeholder.com/120x80?text=Android'"
                       />
-                      <div class="game-content">
-                        <h4 class="game-title">${game.title}</h4>
-                        ${androidBlock}
-                        ${iosBlock}
+                      <div class="d-flex flex-wrap">
+                        ${game.androidLinks
+                          .map(
+                            (link) => `
+                              <a href="${link.url}" ${
+                                link.url !== "#" ? 'target="_blank"' : ""
+                              } class="btn btn-primary game-btn">${link.text}</a>
+                            `
+                          )
+                          .join("")}
                       </div>
                     </div>
-                  `;
-              })
-              .join("");
-          };
-        // KẾT THÚC PHẦN SỬA LỖI LOGIC
+                  </div>
+                `
+                : "";
+
+              const iosBlock = game.iosLinks?.length
+                ? `
+                  <div class="mt-3">
+                    <div class="small text-muted mb-2">iOS</div>
+                    <div class="d-flex gap-3 align-items-start platform-block">
+                      <img
+                        src="${game.iosImage || ""}"
+                        alt="iOS"
+                        class="platform-image"
+                        onerror="this.src='https://via.placeholder.com/120x80?text=iOS'"
+                      />
+                      <div class="d-flex flex-wrap">
+                        ${game.iosLinks
+                          .map(
+                            (link) => `
+                              <a href="${link.url}" ${
+                                link.url !== "#" ? 'target="_blank"' : ""
+                              } class="btn btn-primary game-btn">${link.text}</a>
+                            `
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                  </div>
+                `
+                : "";
+
+              return `
+                <div class="card p-3 mb-3">
+                  <h4 class="game-title">${game.title}</h4>
+                  ${androidBlock}
+                  ${iosBlock}
+                </div>
+              `;
+            })
+            .join("");
+        };
+
+        /******************** BUILD LINK / QR ********************/
         const buildMBWeb = (amount, code) =>
           `https://mbbank.com.vn/QRTransfer?bankId=MB&accountNo=${ACCOUNT_NO}&amount=${amount}&content=${encodeURIComponent(
             code
           )}`;
 
-        // Android Intent mở thẳng app MB
+        // Android Intent mở thẳng app MB (giữ lại để dùng nếu người dùng bấm nút, nhưng KHÔNG tự mở nữa)
         const buildMBIntent = (amount, code) =>
           `intent://mbbank.com.vn/QRTransfer?bankId=MB&accountNo=${ACCOUNT_NO}&amount=${amount}&content=${encodeURIComponent(
             code
           )}#Intent;scheme=https;package=${MB_ANDROID_PKG};end`;
 
-        // VietQR Deeplink: điều hướng tới app ngân hàng tương ứng (nếu hỗ trợ)
-        // Lưu ý: nếu app chưa cài, có thể không mở được — UI đã có QR và nút mở lại.
+        // VietQR Deeplink
         const buildVietQRLink = (appCode, amount, code) =>
           `https://dl.vietqr.io/pay?app=${appCode}&acc=${ACCOUNT_NO}&amount=${amount}&note=${encodeURIComponent(
             code
           )}`;
 
-        // Ảnh QR (mã nội dung: code, số tiền: amount)
-        // Bạn có thể đổi sang img.vietqr.io nếu muốn.
+        // Ảnh QR
         const buildQRImage = (amount, code) =>
           `https://qr.sepay.vn/img?acc=${ACCOUNT_NO}&bank=${encodeURIComponent(
             ACCOUNT_BANK_CODE
@@ -459,10 +457,11 @@
             code
           )}&template=compact`;
 
-        // Nhãn đẹp cho ngân hàng
-        const labelOfBank = (bankKey) => BANK_DISPLAY[bankKey] || "Ngân hàng khác";
+        // Nhãn ngân hàng
+        const labelOfBank = (bankKey) =>
+          BANK_DISPLAY[bankKey] || "Ngân hàng khác";
 
-        // Mở app theo lựa chọn người dùng
+        // GÁN LINK THANH TOÁN CHO NÚT "Mở link thanh toán"
         function openBankApp({ bankKey, amount, code, auto = false }) {
           const a = el("paymentLink");
           let href = "#";
@@ -470,21 +469,12 @@
           if (bankKey === "mb") {
             const baseWeb = buildMBWeb(amount, code);
             const androidIntent = buildMBIntent(amount, code);
-            href = baseWeb; // đặt cho nút
+            href = baseWeb;
 
+            // *** ĐÃ TẮT TỰ ĐỘNG MỞ APP KHI ẤN THANH TOÁN ***
+            // auto === true hiện không dùng nữa
             if (auto && (isAndroid || isIOS)) {
-              if (isAndroid) {
-                // Thử Intent -> fallback web
-                window.location.href = androidIntent;
-                setTimeout(() => {
-                  try {
-                    window.location.href = baseWeb;
-                  } catch (_) {}
-                }, 1200);
-              } else {
-                // iOS: mở universal link (nếu app hỗ trợ sẽ vào app, nếu không thì web)
-                window.location.href = baseWeb;
-              }
+              // KHÔNG gọi window.location nữa
             }
           } else {
             const appCode = VIETQR_APP[bankKey] || "mb";
@@ -492,20 +482,19 @@
             href = vietqr;
 
             if (auto && (isAndroid || isIOS)) {
-              // Thử mở app qua VietQR deeplink
-              window.location.href = vietqr;
-              // Không bắt buộc fallback ở đây vì người dùng vẫn đang ở modal và có QR sẵn
+              // KHÔNG tự mở app nữa
             }
           }
 
-          a.href = href; // luôn gán để user có thể bấm lại
+          a.href = href;
         }
 
         /******************** UI CẬP NHẬT MODAL ********************/
         function updateModal({ code, product, amount, bankKey, message }) {
           el("note").textContent = code;
           el("product").textContent = product;
-          el("amount").textContent = amount.toLocaleString("vi-VN") + " VNĐ";
+          el("amount").textContent =
+            amount.toLocaleString("vi-VN") + " VNĐ";
           el("bankLabel").textContent = labelOfBank(bankKey);
 
           // Set QR image
@@ -517,8 +506,12 @@
                 amount === 0 ? "warning" : "success"
               }">${message}</div>`
             : "";
+
+          // Chuẩn bị link mở app/ngân hàng (chỉ để người dùng bấm nếu muốn)
           openBankApp({ bankKey, amount, code, auto: false });
         }
+
+        /******************** XỬ LÝ THANH TOÁN (KHÔNG TỰ MỞ APP) ********************/
         function handlePayment() {
           if (state.processing) return;
           state.processing = true;
@@ -526,17 +519,27 @@
           const game = el("game")?.value;
           const duration = el("duration")?.value;
           const bankKey = el("bankApp")?.value || "mb";
-          const discountCode = el("discountCode")?.value.trim().toUpperCase();
+          const discountCode = el("discountCode")?.value
+            .trim()
+            .toUpperCase();
           const config = priceConfig[duration];
 
           if (!game || !config) {
-            showAlert("error", "Thiếu thông tin!", "Vui lòng chọn game và thời hạn.");
+            showAlert(
+              "error",
+              "Thiếu thông tin!",
+              "Vui lòng chọn game và thời hạn."
+            );
             state.processing = false;
             return;
           }
 
-          const discountResult = applyDiscount(discountCode, config.amount);
-          const transCode = "DXK" + Math.floor(1000 + Math.random() * 9000);
+          const discountResult = applyDiscount(
+            discountCode,
+            config.amount
+          );
+          const transCode =
+            "DXK" + Math.floor(1000 + Math.random() * 9000);
           const product = `${config.display} | ${game}`;
 
           state.transaction = {
@@ -545,6 +548,8 @@
             amount: discountResult.final,
             bankKey,
           };
+
+          // Cập nhật modal với thông tin thanh toán
           updateModal({
             code: transCode,
             product,
@@ -553,17 +558,13 @@
             message: discountResult.msg,
           });
 
+          // CHỈ MỞ MODAL, KHÔNG GỌI openBankApp(auto:true) NỮA
           state.modal.show();
-          openBankApp({
-            bankKey,
-            amount: discountResult.final,
-            code: transCode,
-            auto: true,
-          });
 
           state.processing = false;
         }
 
+        /******************** XÁC NHẬN ĐÃ CHUYỂN KHOẢN ********************/
         function confirmPayment() {
           if (!state.transaction || state.processing) return;
           state.processing = true;
@@ -588,13 +589,19 @@
           }, 5000);
         }
 
+        /******************** COPY NỘI DUNG ********************/
         function handleCopy(e) {
           const btn = e.target.closest(".copy-btn");
           if (!btn) return;
-          const textToCopy = btn.dataset.text || el(btn.dataset.target)?.textContent;
+          const textToCopy =
+            btn.dataset.text ||
+            el(btn.dataset.target)?.textContent;
           if (!textToCopy) return;
 
-          if (navigator.clipboard && navigator.clipboard.writeText) {
+          if (
+            navigator.clipboard &&
+            navigator.clipboard.writeText
+          ) {
             navigator.clipboard
               .writeText(textToCopy)
               .then(() => showToast("Đã sao chép!"))
@@ -603,7 +610,8 @@
                 showAlert(
                   "error",
                   "Lỗi sao chép!",
-                  "Không thể tự động sao chép. Vui lòng sao chép thủ công: " + textToCopy
+                  "Không thể tự động sao chép. Vui lòng sao chép thủ công: " +
+                    textToCopy
                 );
               });
           } else {
@@ -619,35 +627,52 @@
               showAlert(
                 "error",
                 "Lỗi sao chép!",
-                "Không thể tự động sao chép. Vui lòng sao chép thủ công: " + textToCopy
+                "Không thể tự động sao chép. Vui lòng sao chép thủ công: " +
+                  textToCopy
               );
             }
             document.body.removeChild(textarea);
           }
         }
 
+        /******************** THỬ MỞ LẠI LINK (USER CHỦ ĐỘNG) ********************/
         function retryOpen() {
           if (!state.transaction) return;
           openBankApp({
             bankKey: state.transaction.bankKey,
             amount: state.transaction.amount,
             code: state.transaction.code,
-            auto: true,
+            auto: true, // vẫn cho phép user bấm nút để thử mở
           });
         }
-        
-        // CHẠY HÀM RENDER ĐÃ SỬA
+
+        /******************** INIT ********************/
         renderGames();
-        
-        document.getElementById("year").textContent = new Date().getFullYear();
+
+        document.getElementById("year").textContent =
+          new Date().getFullYear();
 
         state.modal = new bootstrap.Modal(el("paymentModal"));
-        el("paymentButton").addEventListener("click", handlePayment);
-        el("confirmBtn").addEventListener("click", confirmPayment);
-        el("retryOpenApp").addEventListener("click", retryOpen);
+
+        el("paymentButton").addEventListener(
+          "click",
+          handlePayment
+        );
+        el("confirmBtn").addEventListener(
+          "click",
+          confirmPayment
+        );
+        el("retryOpenApp").addEventListener(
+          "click",
+          retryOpen
+        );
         document.addEventListener("click", handleCopy);
+
         const form = document.getElementById("orderForm");
-        if (form) form.addEventListener("submit", (e) => e.preventDefault());
+        if (form)
+          form.addEventListener("submit", (e) =>
+            e.preventDefault()
+          );
       });
     </script>
   </body>
